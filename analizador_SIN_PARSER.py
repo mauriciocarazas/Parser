@@ -1,4 +1,5 @@
 import ply.lex as lex
+import ply.yacc as yacc
 
 # Definimos los tokens
 tokens = [
@@ -84,10 +85,37 @@ reserved = {
     'raise': 'RAISE',
     'return': 'RETURN',
     'try': 'TRY',
-    'while': 'WHILE',
+    'while': 'WHILE',   
     'with': 'WITH',
     'yield': 'YIELD'
 }
+
+
+# Define las reglas de la gramática
+def p_program(p):
+    '''Program : DefList StatementList'''
+    # Código para manejar la regla del programa
+
+def p_def_list(p):
+    '''DefList : Def DefList
+               |'''
+    # Código para manejar la regla de la lista de definiciones
+
+def p_def(p):
+    '''Def : DEF ID LPAREN TypedVarList RPAREN Return COLON Block'''
+    # Código para manejar la regla de definición
+
+def p_typed_var(p):
+    '''TypedVar : ID COLON Type'''
+    # Código para manejar la regla de variable tipada
+
+def p_type(p):
+    '''Type : INT
+            | STR
+            | LBRACKET Type RBRACKET'''
+    # Código para manejar la regla de tipo
+
+
 
 # Identificadores y literales
 def t_ID(t):
@@ -116,10 +144,14 @@ lexer = lex.lex()
 # Archivo de entrada
 filename = 'code.txt'
 
+# Construye el parser
+parser = yacc.yacc()
+
+
 # Abrir el archivo y leer su contenido
 with open(filename, 'r') as file:
     data = file.read()
-
+parsed_data = parser.parse(data)
 # Pasamos el contenido del archivo al lexer
 lexer.input(data)
 
